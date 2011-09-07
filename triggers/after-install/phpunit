@@ -1,18 +1,4 @@
-
-after_install "install_phpunit"
-
-install_phpunit() {
-    pyrus="$PREFIX/bin/pyrus"
-
-    # Set up the required channels
-    "$pyrus" channel-discover "components.ez.no" > /dev/null
-    "$pyrus" channel-discover "pear.symfony-project.com" > /dev/null
-    "$pyrus" channel-discover "pear.phpunit.de" > /dev/null
-
-    _ezcomponents_hack
-
-    "$pyrus" install "phpunit/PHPUnit" > /dev/null
-}
+#!/bin/bash
 
 # ezComponents' PEAR Channel somehow not works with Pyrus
 # so manually download and install the package files.
@@ -42,3 +28,15 @@ _download_ezc_component() {
 
     wget -P "$PHP_BUILD_ROOT/packages/ezc" "$url" > /dev/null
 }
+
+pyrus="$PREFIX/bin/pyrus"
+
+# Set up the required channels
+"$pyrus" channel-discover "components.ez.no" > /dev/null
+"$pyrus" channel-discover "pear.symfony-project.com" > /dev/null
+"$pyrus" channel-discover "pear.phpunit.de" > /dev/null
+
+_ezcomponents_hack
+
+"$pyrus" install "phpunit/PHPUnit" > /dev/null
+
