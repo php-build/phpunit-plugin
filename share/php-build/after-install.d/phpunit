@@ -3,23 +3,48 @@
 set -e
 
 pyrus="$PREFIX/bin/pyrus"
+pear="$PREFIX/bin/pear"
 
-# ezComponents' PEAR Channel somehow not works with Pyrus
-# so manually download and install the package files.
-_ezcomponents_hack() {
-    local base_url="http://components.ez.no/get/$package"
-    local ezcBase="$base_url/Base-1.8.tgz"
-    local ezcConsoleTools="$base_url/ConsoleTools-1.6.1.tgz"
+use_pear() {
+    {
+        "$pear" upgrade pear
 
-    "$pyrus" install "$ezcBase" "$ezcConsoleTools" > /dev/null
+        "$pear" channel-discover components.ez.no
+        "$pear" channel-discover pear.symfony-project.com
+        "$pear" channel-discover pear.phpunit.de
+
+        "$pear" install "phpunit/PHPUnit"
+    } > /dev/null
 }
 
-# Set up the required channels
-"$pyrus" channel-discover "components.ez.no" > /dev/null
-"$pyrus" channel-discover "pear.symfony-project.com" > /dev/null
-"$pyrus" channel-discover "pear.phpunit.de" > /dev/null
+use_pyrus() {
+    # ezComponents' PEAR Channel somehow not works with Pyrus
+    # so manually download and install the package files.
+    _ezcomponents_hack() {
+        local base_url="http://components.ez.no/get/$package"
+        local ezcBase="$base_url/Base-1.8.tgz"
+        local ezcConsoleTools="$base_url/ConsoleTools-1.6.1.tgz"
 
-_ezcomponents_hack
+        "$pyrus" install "$ezcBase" "$ezcConsoleTools" > /dev/null
+    }
 
-"$pyrus" install "phpunit/PHPUnit" > /dev/null
+    # Set up the required channels
+    "$pyrus" channel-discover "components.ez.no" > /dev/null
+    "$pyrus" channel-discover "pear.symfony-project.com" > /dev/null
+    "$pyrus" channel-discover "pear.phpunit.de" > /dev/null
+
+    _ezcomponents_hack
+
+    "$pyrus" install "phpunit/PHPUnit" > /dev/null
+}
+
+if [ -f "$pyrus" ]; then
+    use_pyrus
+else 
+    if [ -f "$pear" ]; then
+        use_pear
+    else
+        echo "Neither pear nor pyrus found in $PREFIX/bin. Aborting" >&3
+    fi
+fi
 
