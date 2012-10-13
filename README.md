@@ -18,7 +18,9 @@ and I'm done.
 
 ## Install
 
-Just copy the `triggers` directory into your `php-build` installation.
+Just copy the `share` directory into your `php-build` installation, or
+link `share/php-build/after-install.d/phpunit` to
+`share/php-build/after-install.d/` in your `php-build` installation.
 
 ## License
 
