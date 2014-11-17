@@ -3,7 +3,7 @@ PHPUnit Plugin for php-build
 ============================
 
 - - -
-**This plugin relies on the <pear.phpunit.de> which will no longer be available after December 31 2014. After this date the plugin will not function anymore.**
+**This plugin relies on the [pear.phpunit.de](http://pear.phpunit.de) which will no longer be available after December 31 2014. After this date the plugin will not function anymore.**
 - - -
 
 ## What is this?
